@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>ajouter un article</title>
+{% endblock %}
+
+{% block body %}
+  <h2>ajouter un article</h2>
+  {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+  <form method="post" action="/article/add">
+    <fieldset>
+        <legend>Ajouter un article</legend>
+        <input type="hidden" name="id" size="18" id="id">
+        <label for="nom">nom</label><br>
+        <input type="text" name="nom" size="18" id="nom"><br>
+        <label for="type_article_id">type article :</label><br>
+        <select name="type_article_id" id="type_article_id" required>
+            <option value="">Sélectionner un type d'article</option>
+            {% for type in types_articles %}
+                 <option value="{{ type.id }}">{{ type.libelle }}</option>
+            {% endfor %}
+        </select><br>
+        <label for="description">description</label><br>
+        <input type="text" name="description" size="18" id="description"><br>
+        <label for="prix">prix</label><br>
+        <input type="number" name="prix" size="18" id="prix"><br>
+        <label for="stock">stock</label><br>
+        <input type="number" name="stock" size="18" id="stock"><br>
+        <input type="submit" value="Ajouter" name="Ajouter" >
+    </fieldset>
+  </form>
+{% endblock %}
+
+<!--
+    departement employé
+
+    id = request.form.get('id', '')
+    nom = request.form.get('nom', '')
+    type_article_id = request.form.get('type_article_id')
+    prix = request.form.get('prix', '')
+    stock = request.form.get('stock', '')
+    description = request.form.get('description', '')
+    image = request.form.get('image', '')
+-->

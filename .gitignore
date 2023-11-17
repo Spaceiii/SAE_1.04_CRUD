@@ -1,0 +1,4 @@
+.idea
+.gitignore
+launcher.sh
+__pycache__

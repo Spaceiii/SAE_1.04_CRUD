@@ -1,4 +1,5 @@
 .idea
 .gitignore
+.env
 launcher.sh
 __pycache__

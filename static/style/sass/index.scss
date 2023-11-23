@@ -1,0 +1,52 @@
+$primary: #339d42;
+
+:root {
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid;
+
+  img {
+    height: 60px;
+    padding-right: 1rem;
+    border-right: 1px solid;
+  }
+
+  .nav-buttons {
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: row;
+  }
+
+  a {
+    display: block;
+    margin-right: 10px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #fff;
+    background: #aaa;
+    padding: .4rem 1rem;
+    border-radius: 4px;
+    transition: filter 300ms ease;
+
+    &.green {
+      background: $primary;
+    }
+
+    &:hover {
+      filter: brightness(110%);
+    }
+  }
+}
+
+main {
+  h1 {
+    text-align: center;
+  }
+}

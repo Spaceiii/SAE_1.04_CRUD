@@ -1,0 +1,45 @@
+:root {
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid;
+}
+.menu img {
+  height: 60px;
+  padding-right: 1rem;
+  border-right: 1px solid;
+}
+.menu .nav-buttons {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+}
+.menu a {
+  display: block;
+  margin-right: 10px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  color: #fff;
+  background: #aaa;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  transition: filter 300ms ease;
+}
+.menu a.green {
+  background: #339d42;
+}
+.menu a:hover {
+  filter: brightness(110%);
+}
+
+main h1 {
+  text-align: center;
+}
+
+/*# sourceMappingURL=index.css.map */

@@ -44,5 +44,19 @@ def show_accueil():
     return render_template("index.html", tarifs=tarifs)
 
 
+@app.route("/seance/show")
+def show_seance():
+    cursor = get_db().cursor()
+    sql = '''
+    SELECT Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
+    FROM Seance
+    JOIN Lieu
+    ON Lieu.id_lieu = Seance.id_lieu;
+    '''
+    cursor.execute(sql)
+    seances = cursor.fetchall()
+    return render_template("seance/show_seance.html", seances=seances)
+
+
 if __name__ == '__main__':
     app.run()

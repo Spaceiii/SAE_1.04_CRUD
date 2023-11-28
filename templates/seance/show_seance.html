@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Afficher les séances</title>
+{% endblock %}
+
+{% block body %}
+    {% for seance in seances %}
+        <div>
+            <h3>{{ seance.libelle_seance }}</h3>
+            <p>Tarif: {{ seance.tarif }}€</p>
+            <p>Lieu : {{ seance.nom_lieu }}, {{ seance.ville_lieu }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

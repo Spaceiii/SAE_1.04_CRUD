@@ -58,5 +58,17 @@ def show_seance():
     return render_template("seance/show_seance.html", seances=seances)
 
 
+@app.route("/embauche/show")
+def show_embauche():
+    cursor = get_db().cursor()
+    sql = '''
+    SELECT *
+    FROM embauche;
+    '''
+    cursor.execute(sql)
+    embauches = cursor.fetchall()
+    return render_template("embauche/show_embauche.html", embauches=embauches)
+
+
 if __name__ == '__main__':
     app.run()

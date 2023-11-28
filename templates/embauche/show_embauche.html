@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'layout.html' %}
 
-</body>
-</html>
+{% block title %}
+    <title>Afficher les embauches</title>
+{% endblock %}
+
+{% block body %}
+    {% for embauche in embauches %}
+    	<div>{{ embauche }}</div>
+    {% endfor %}
+{% endblock %}

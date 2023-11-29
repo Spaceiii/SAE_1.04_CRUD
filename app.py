@@ -5,19 +5,22 @@ import pymysql.cursors
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'une cle(token) : grain de sel(any random string)'
 
 
 def get_db():
+    load_dotenv()
+
     if 'db' not in g:
+        print("Connexion à la base de données")
+        print(os.environ.get("HOST"), os.environ.get("USER"), os.environ.get("PASSWORD"), os.environ.get("DATABASE")    )
         g.db = pymysql.connect(
-            host=os.environ.get("HOST"),                 # à modifier
-            user=os.environ.get("USER"),                     # à modifier
-            password=os.environ.get("PASSWORD"),                # à modifier
-            database=os.environ.get("DATABASE"),        # à modifier
+            host=os.environ.get("HOST"),
+            user=os.environ.get("LOGIN"),
+            password=os.environ.get("PASSWORD"),
+            database=os.environ.get("DATABASE"),
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )

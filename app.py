@@ -81,8 +81,13 @@ def edit_seance():
 def show_embauche():
     cursor = get_db().cursor()
     sql = '''
-    SELECT *
-    FROM embauche;
+    SELECT Embauche.*, Profession.code_profession, Animateur.id_animateur
+    FROM Embauche
+    JOIN Profession
+    ON Embauche.code_profession = Profession.code_profession
+    JOIN Animateur
+    ON Embauche.id_animateur = Animateur.id_animateur
+    ;
     '''
     cursor.execute(sql)
     embauches = cursor.fetchall()

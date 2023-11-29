@@ -5,7 +5,27 @@
 {% endblock %}
 
 {% block body %}
-    {% for embauche in embauches %}
-    	<div>{{ embauche }}</div>
-    {% endfor %}
+    <main>
+        <h1>Liste des embauches</h1>
+        <div class="list-seance">
+            {% for embauche in embauches %}
+                <div class="seance-card">
+                    <h3>Embauche n°{{ embauche.id_embauche }}</h3>
+                    <hr>
+                    <p>Salaire: {{ embauche.salaire }}€</p>
+                    <p>Date : {{ embauche.date_embauche }}</p>
+                    <hr>
+                    <div class="list-btn">
+                      <a href="/embauche/edit?id={{ embauche.id_embauche }}" class="seance-edit">Editer</a>
+                        <a href="/" class="seance-delete">Supprimer</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="seance-card card-add">
+               <h3>Ajouter une embauche</h3>
+                <a href="/">Ajout</a>
+            </div>
+        </div>
+    </main>
+
 {% endblock %}

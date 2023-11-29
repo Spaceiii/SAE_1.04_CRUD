@@ -14,10 +14,10 @@ app.secret_key = 'une cle(token) : grain de sel(any random string)'
 def get_db():
     if 'db' not in g:
         g.db = pymysql.connect(
-            host="localhost",                 # à modifier
-            user="root",                     # à modifier
+            host=os.environ.get("HOST"),                 # à modifier
+            user=os.environ.get("USER"),                     # à modifier
             password=os.environ.get("PASSWORD"),                # à modifier
-            database="SAE_104",        # à modifier
+            database=os.environ.get("DATABASE"),        # à modifier
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )

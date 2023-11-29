@@ -2,6 +2,10 @@
   font-family: "Segoe UI", Arial, sans-serif;
 }
 
+body {
+  margin: 0;
+}
+
 .menu {
   display: flex;
   flex-direction: row;
@@ -10,16 +14,19 @@
   padding: 1rem;
   border-bottom: 1px solid;
 }
+
 .menu img {
   height: 60px;
   padding-right: 1rem;
   border-right: 1px solid;
 }
+
 .menu .nav-buttons {
   padding-left: 1rem;
   display: flex;
   flex-direction: row;
 }
+
 .menu a {
   display: block;
   margin-right: 10px;
@@ -31,9 +38,11 @@
   border-radius: 4px;
   transition: filter 300ms ease;
 }
+
 .menu a.green {
   background: #339d42;
 }
+
 .menu a:hover {
   filter: brightness(110%);
 }
@@ -41,5 +50,70 @@
 main h1 {
   text-align: center;
 }
+
+.list-seance {
+  padding: 1rem 5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.seance-card {
+  border: 1px solid;
+  margin: 1rem;
+  padding: 0.5rem;
+  border-radius: 20px;
+}
+
+.seance-card.card-add {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px dashed;
+}
+
+.seance-card.card-add h3 {
+  margin-top: 0;
+}
+
+.seance-card.card-add a {
+  display: block;
+  background: #339d42;
+  width: max-content;
+}
+
+.seance-card a {
+  margin-right: 10px;
+  text-decoration: none;
+  font-size: 1rem;
+  color: #fff;
+  background: #aaa;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  transition: filter 300ms ease;
+  display: inline-block;
+}
+
+.seance-card a:hover {
+  filter: brightness(110%);
+}
+
+.seance-card .list-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.seance-card a.seance-edit {
+  background: #339d42;
+}
+
+.seance-card a.seance-delete {
+  background: #d25f5f;
+}
+
+
 
 /*# sourceMappingURL=index.css.map */

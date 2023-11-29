@@ -1,7 +1,12 @@
 $primary: #339d42;
+$red-btn: #d25f5f;
 
 :root {
   font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
 }
 
 .menu {
@@ -48,5 +53,68 @@ $primary: #339d42;
 main {
   h1 {
     text-align: center;
+  }
+}
+
+.list-seance {
+  padding: 1rem 5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.seance-card {
+  border: 1px solid;
+  margin: 1rem;
+  padding: .5rem;
+  border-radius: 20px;
+
+  &.card-add {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px dashed;
+
+    h3 {
+      margin-top: 0;
+    }
+
+    a {
+      display: block;
+      background: $primary;
+      width: max-content;
+    }
+  }
+
+  a {
+    margin-right: 10px;
+    text-decoration: none;
+    font-size: 1rem;
+    color: #fff;
+    background: #aaa;
+    padding: .4rem 1rem;
+    border-radius: 4px;
+    transition: filter 300ms ease;
+    display: inline-block;
+
+    &:hover {
+      filter: brightness(110%);
+    }
+  }
+
+  .list-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  a.seance-edit {
+    background: $primary;
+  }
+
+  a.seance-delete {
+    background: $red-btn;
   }
 }

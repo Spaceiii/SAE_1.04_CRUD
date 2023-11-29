@@ -48,7 +48,7 @@ def show_accueil():
 def show_seance():
     cursor = get_db().cursor()
     sql = '''
-    SELECT Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
+    SELECT Seance.id_seance, Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
     FROM Seance
     JOIN Lieu
     ON Lieu.id_lieu = Seance.id_lieu;
@@ -56,6 +56,22 @@ def show_seance():
     cursor.execute(sql)
     seances = cursor.fetchall()
     return render_template("seance/show_seance.html", seances=seances)
+
+
+@app.route("/seance/edit", methods=["GET"])
+def edit_seance():
+    idetifiant = int(request.args.get('id', '0'))
+    cursor = get_db().cursor()
+    sql = f'''
+        SELECT Seance.id_seance, Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
+        FROM Seance
+        JOIN Lieu
+        ON Lieu.id_lieu = Seance.id_lieu
+        WHERE Seance.id_seance = {idetifiant}
+        '''
+    cursor.execute(sql)
+    seance = cursor.fetchall()
+    return render_template("seance/edit_seance.html", seance=seance)
 
 
 @app.route("/embauche/show")

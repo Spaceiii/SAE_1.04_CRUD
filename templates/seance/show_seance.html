@@ -5,11 +5,27 @@
 {% endblock %}
 
 {% block body %}
-    {% for seance in seances %}
-        <div>
-            <h3>{{ seance.libelle_seance }}</h3>
-            <p>Tarif: {{ seance.tarif }}€</p>
-            <p>Lieu : {{ seance.nom_lieu }}, {{ seance.ville_lieu }}</p>
+    <main>
+        <h1>Liste des séances</h1>
+        <div class="list-seance">
+            {% for seance in seances %}
+                <div class="seance-card">
+                    <h3>{{ seance.libelle_seance }}</h3>
+                    <hr>
+                    <p>Tarif: {{ seance.tarif }}€</p>
+                    <p>Lieu : {{ seance.nom_lieu }}, {{ seance.ville_lieu }}</p>
+                    <hr>
+                    <div class="list-btn">
+                      <a href="/seance/edit?id={{ seance.id_seance }}" class="seance-edit">Editer</a>
+                        <a href="/" class="seance-delete">Supprimer</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="seance-card card-add">
+               <h3>Ajouter une séance</h3>
+                <a href="/">Ajout</a>
+            </div>
         </div>
-    {% endfor %}
+    </main>
+
 {% endblock %}

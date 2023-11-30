@@ -1,13 +1,33 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    <title>Evalutaions des clients</title>
+    <title>Afficher les évaluations</title>
 {% endblock %}
 
 {% block body %}
     <main>
         <h1>Liste des évaluations</h1>
-        {{ seance.tarif }}
+        <div class="list-seance">
+            {% for eval in evaluations %}
+                <div class="seance-card">
+                    <h3>{{ seance.libelle_seance }}</h3>
+                    <hr>
+                    <p>Tarif: {{ seance.tarif }}€</p>
+                    <p>Lieu : {{ seance.nom_lieu }}, {{ seance.ville_lieu }}</p>
+                    <p>Nombre de place : {{ seance.nombre_places }}</p>
+                    <p>Type d'atelier : {{ seance.libelle_atelier }}</p>
+                    <hr>
+                    <div class="list-btn">
+                        <a href="/seance/edit?id={{ seance.id_seance }}" class="seance-edit">Editer</a>
+                        <a href="/seance/delete?id={{ seance.id_seance }}" class="seance-delete">Supprimer</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="seance-card card-add">
+               <h3>Ajouter une séance</h3>
+                <a href="/">Ajout</a>
+            </div>
+        </div>
     </main>
 
 {% endblock %}

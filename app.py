@@ -14,8 +14,6 @@ def get_db():
     load_dotenv()
 
     if 'db' not in g:
-        print("Connexion à la base de données")
-        print(os.environ.get("HOST"), os.environ.get("USER"), os.environ.get("PASSWORD"), os.environ.get("DATABASE")    )
         g.db = pymysql.connect(
             host=os.environ.get("HOST"),
             user=os.environ.get("LOGIN"),
@@ -51,10 +49,12 @@ def show_accueil():
 def show_seance():
     cursor = get_db().cursor()
     sql = '''
-    SELECT Seance.id_seance, Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
+    SELECT Seance.*, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu, Atelier.libelle_atelier  
     FROM Seance
     JOIN Lieu
-    ON Lieu.id_lieu = Seance.id_lieu;
+    ON Lieu.id_lieu = Seance.id_lieu
+    JOIN Atelier
+    ON Atelier.code_atelier = Seance.code_atelier;
     '''
     cursor.execute(sql)
     seances = cursor.fetchall()
@@ -63,18 +63,78 @@ def show_seance():
 
 @app.route("/seance/edit", methods=["GET"])
 def edit_seance():
-    idetifiant = int(request.args.get('id', '0'))
+    identifiant = int(request.args.get('id', '0'))
     cursor = get_db().cursor()
     sql = f'''
-        SELECT Seance.id_seance, Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
+        SELECT Seance.*, Lieu.nom_lieu, Lieu.ville_lieu, Atelier.libelle_atelier
         FROM Seance
         JOIN Lieu
         ON Lieu.id_lieu = Seance.id_lieu
-        WHERE Seance.id_seance = {idetifiant}
+        JOIN Atelier
+        ON Atelier.code_atelier = Seance.code_atelier
+        WHERE Seance.id_seance = {identifiant};
         '''
     cursor.execute(sql)
     seance = cursor.fetchall()
-    return render_template("seance/edit_seance.html", seance=seance)
+
+    sql = f'''
+            SELECT Atelier.libelle_atelier, Atelier.code_atelier
+            FROM Atelier;
+            '''
+    cursor.execute(sql)
+    ateliers = cursor.fetchall()
+
+    sql = f'''
+                SELECT Lieu.nom_lieu, Lieu.id_lieu
+                FROM Lieu;
+                '''
+    cursor.execute(sql)
+    lieux = cursor.fetchall()
+    return render_template("seance/edit_seance.html", seance=seance, ateliers=ateliers, lieux=lieux)
+
+
+@app.route("/seance/edit", methods=["POST"])
+def edit_seance_post():
+    libelle_seance = request.form.get("libelle_seance")
+    date_seance = request.form.get("date_seance")
+    place_seance = int(request.form.get("place_seance"))
+    tarif = float(request.form.get("tarif"))
+    code_atelier = int(request.form.get("code_atelier"))
+    id_lieu = int(request.form.get("id_lieu"))
+    id_seance = int(request.form.get("id_seance"))
+    cursor = get_db().cursor()
+    print(libelle_seance, date_seance, place_seance, tarif, code_atelier, id_lieu, id_seance)
+    sql = '''
+    UPDATE Seance
+    SET
+        libelle_seance = %s,
+        date_heure_seance = %s,
+        nombre_places = %s,
+        tarif = %s,
+        code_atelier = %s,
+        id_lieu = %s
+    WHERE Seance.id_seance = %s;
+    '''
+    cursor.execute(sql, (libelle_seance, date_seance, place_seance, tarif, code_atelier, id_lieu, id_seance))
+    return redirect("/seance/show")
+
+
+@app.route("/seance/delete", methods=["GET"])
+def delete_seance():
+    identifiant = int(request.args.get('id', '0'))
+    cursor = get_db().cursor()
+    sql = '''
+    SELECT Seance.*, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu, Atelier.libelle_atelier
+    FROM Seance
+    JOIN Lieu
+    ON Lieu.id_lieu = Seance.id_lieu
+    JOIN Atelier
+    ON Atelier.code_atelier = Seance.code_atelier;
+    '''
+    flash(f"{identifiant}", "")
+    cursor.execute(sql)
+    seances = cursor.fetchall()
+    return redirect("/seance/show")
 
 
 @app.route("/embauche/show")
@@ -90,7 +150,7 @@ def show_embauche():
     ;
     '''
     cursor.execute(sql)
-    embauches = cursor.fetchall()
+    embauches = cursor.fetchone()
     return render_template("embauche/show_embauche.html", embauches=embauches)
 
 

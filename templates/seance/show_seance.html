@@ -14,10 +14,12 @@
                     <hr>
                     <p>Tarif: {{ seance.tarif }}€</p>
                     <p>Lieu : {{ seance.nom_lieu }}, {{ seance.ville_lieu }}</p>
+                    <p>Nombre de place : {{ seance.nombre_places }}</p>
+                    <p>Type d'atelier : {{ seance.libelle_atelier }}</p>
                     <hr>
                     <div class="list-btn">
-                      <a href="/seance/edit?id={{ seance.id_seance }}" class="seance-edit">Editer</a>
-                        <a href="/" class="seance-delete">Supprimer</a>
+                        <a href="/seance/edit?id={{ seance.id_seance }}" class="seance-edit">Editer</a>
+                        <a href="/seance/delete?id={{ seance.id_seance }}" class="seance-delete">Supprimer</a>
                     </div>
                 </div>
             {% endfor %}

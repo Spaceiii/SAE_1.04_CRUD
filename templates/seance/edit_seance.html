@@ -5,7 +5,51 @@
 {% endblock %}
 
 {% block body %}
-    {{ seance }}
+<main class="edit-main">
+    {% if seance == () %}
+        Cette séance n'existe pas / plus !
+    {% else %}
 
-    <form action=""></form>
+    <h1>Modifier la seance : "{{ seance[0].libelle_seance }}"</h1>
+
+    <form action="/seance/edit" method="post">
+        <input name="id_seance" id="id_seance" type="hidden" value="{{ seance[0].id_seance }}">
+        <label for="libelle_seance">Libellé de la séance :</label>
+        <input required type="text" id="libelle_seance" name="libelle_seance" value="{{ seance[0].libelle_seance }}">
+        <br>
+        <label for="date_seance">Date de la séance : </label>
+        <input required type="datetime-local" id="date_seance" name="date_seance" value="{{ seance[0].date_heure_seance }}">
+        <br>
+        <label for="place_seance">Nombre de place : </label>
+        <input required type="number" name="place_seance" id="place_seance" value="{{ seance[0].nombre_places }}">
+        <br>
+        <label for="tarif">Tarif : </label>
+        <input required type="number" name="tarif" id="tarif" value="{{ seance[0].tarif }}">
+
+        <br><label for="code_atelier">Type d'atelier : </label>
+        <select required name="code_atelier" id="code_atelier">
+            {% for atelier in ateliers %}
+                <option
+                    class="option-item"
+                    value="{{ atelier.code_atelier }}"
+                    {% if atelier.code_atelier == seance[0].code_atelier %}selected{% endif %}
+                >{{ atelier.code_atelier }}&nbsp;-&nbsp;{{ atelier.libelle_atelier }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="id_lieu">Lieu</label>
+        <select name="id_lieu" id="id_lieu">
+            {% for lieu in lieux %}
+            <option
+                    class="option-item"
+                    value="{{ lieu.id_lieu }}"
+                    {% if lieu.id_lieu == seance[0].id_lieu %}selected{% endif %}
+                >{{ lieu.id_lieu }}&nbsp;-&nbsp;{{ lieu.nom_lieu }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="submit" value="Modifier">
+    </form>
+    {% endif %}
+</main>
 {% endblock %}

@@ -153,6 +153,33 @@ def show_embauche():
     embauches = cursor.fetchone()
     return render_template("embauche/show_embauche.html", embauches=embauches)
 
+@app.route("/evaluation/show")
+def show_evaluation():
+    cursor = get_db().cursor()
+    sql = '''
+    SELECT Seance.id_seance, Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
+    FROM Seance
+    JOIN Lieu
+    ON Lieu.id_lieu = Seance.id_lieu;
+    '''
+    cursor.execute(sql)
+    seances = cursor.fetchall()
+    return render_template("evaluation/show_evaluation.html", seances=seances)
+
+@app.route("/evaluation/edit", methods=["GET"])
+def edit_evaluation():
+    idetifiant = int(request.args.get('id', '0'))
+    cursor = get_db().cursor()
+    sql = f'''
+        SELECT Seance.id_seance, Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
+        FROM Seance
+        JOIN Lieu
+        ON Lieu.id_lieu = Seance.id_lieu
+        WHERE Seance.id_seance = {idetifiant}
+        '''
+    cursor.execute(sql)
+    seance = cursor.fetchall()
+    return render_template("evaluation/edit_evaluation.html", seance=seance)
 
 if __name__ == '__main__':
     app.run()

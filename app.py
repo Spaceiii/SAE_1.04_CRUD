@@ -158,14 +158,12 @@ def show_embauche():
 def show_evaluation():
     cursor = get_db().cursor()
     sql = '''
-    SELECT Seance.id_seance, Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
-    FROM Seance
-    JOIN Lieu
-    ON Lieu.id_lieu = Seance.id_lieu;
+    SELECT Evaluation.id_evaluation, Evaluation.note_animation, Evaluation.note_qualite, Evaluation.note_interet, Evaluation.commentaire, Evaluation.id_seance, Evaluation.id_participant
+    FROM Evaluation
     '''
     cursor.execute(sql)
-    seances = cursor.fetchall()
-    return render_template("evaluation/show_evaluation.html", seances=seances)
+    evaluations = cursor.fetchall()
+    return render_template("evaluation/show_evaluation.html", evaluations=evaluations)
 
 @app.route("/evaluation/edit", methods=["GET"])
 def edit_evaluation():

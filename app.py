@@ -158,14 +158,27 @@ def show_embauche():
 def show_evaluation():
     cursor = get_db().cursor()
     sql = '''
-    SELECT Evaluation.id_evaluation, Evaluation.note_animation, Evaluation.note_qualite, Evaluation.note_interet, Evaluation.commentaire, Evaluation.id_seance, Evaluation.id_participant
+    SELECT Seance.libelle_seance, Evaluation.*, Participant.prenom_participant, Participant.nom_participant
     FROM Evaluation
-    JOIN Seance
-    ON Seance.libelle_seance = Evaluation.libelle_seance
+    JOIN Seance ON Evaluation.id_seance = Seance.id_seance
+    JOIN Participant ON Evaluation.id_participant = Participant.id_participant
+    ORDER BY Seance.libelle_seance
     '''
     cursor.execute(sql)
     evaluations = cursor.fetchall()
-    return render_template("evaluation/show_evaluation.html", evaluations=evaluations)
+
+    # Regrouper les évaluations par séance
+    evaluations_grouped = {}
+    for evaluation in evaluations:
+        seance = evaluation['libelle_seance']
+        if seance not in evaluations_grouped:
+            evaluations_grouped[seance] = []
+        evaluations_grouped[seance].append(evaluation)
+
+    return render_template("evaluation/show_evaluation.html", evaluations_grouped=evaluations_grouped)
+
+
+
 
 @app.route("/evaluation/edit", methods=["GET"])
 def edit_evaluation():

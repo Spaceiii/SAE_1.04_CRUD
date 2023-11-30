@@ -160,6 +160,8 @@ def show_evaluation():
     sql = '''
     SELECT Evaluation.id_evaluation, Evaluation.note_animation, Evaluation.note_qualite, Evaluation.note_interet, Evaluation.commentaire, Evaluation.id_seance, Evaluation.id_participant
     FROM Evaluation
+    JOIN Seance
+    ON Seance.libelle_seance = Evaluation.libelle_seance
     '''
     cursor.execute(sql)
     evaluations = cursor.fetchall()

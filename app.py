@@ -116,6 +116,7 @@ def edit_seance_post():
     WHERE Seance.id_seance = %s;
     '''
     cursor.execute(sql, (libelle_seance, date_seance, place_seance, tarif, code_atelier, id_lieu, id_seance))
+    get_db().commit()
     return redirect("/seance/show")
 
 

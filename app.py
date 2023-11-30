@@ -103,7 +103,6 @@ def edit_seance_post():
     id_lieu = int(request.form.get("id_lieu"))
     id_seance = int(request.form.get("id_seance"))
     cursor = get_db().cursor()
-    print(libelle_seance, date_seance, place_seance, tarif, code_atelier, id_lieu, id_seance)
     sql = '''
     UPDATE Seance
     SET
@@ -117,6 +116,7 @@ def edit_seance_post():
     '''
     cursor.execute(sql, (libelle_seance, date_seance, place_seance, tarif, code_atelier, id_lieu, id_seance))
     get_db().commit()
+    flash(f"Séance {libelle_seance} éditée avec succès", "sucess")
     return redirect("/seance/show")
 
 
@@ -125,16 +125,19 @@ def delete_seance():
     identifiant = int(request.args.get('id', '0'))
     cursor = get_db().cursor()
     sql = '''
-    SELECT Seance.*, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu, Atelier.libelle_atelier
+    SELECT Seance.libelle_seance
     FROM Seance
-    JOIN Lieu
-    ON Lieu.id_lieu = Seance.id_lieu
-    JOIN Atelier
-    ON Atelier.code_atelier = Seance.code_atelier;
+    WHERE Seance.id_seance = %s;
     '''
-    flash(f"{identifiant}", "")
-    cursor.execute(sql)
-    seances = cursor.fetchall()
+    cursor.execute(sql, tuple([identifiant]))
+    seance = cursor.fetchone()
+    sql = '''
+    DELETE FROM Seance
+    WHERE Seance.id_seance = %s
+    '''
+    cursor.execute(sql, identifiant)
+    get_db().commit()
+    flash(f"Séance \"{seance['libelle_seance']}\" supprimée avec succès", "danger")
     return redirect("/seance/show")
 
 
@@ -154,6 +157,52 @@ def show_embauche():
     embauches = cursor.fetchone()
     return render_template("embauche/show_embauche.html", embauches=embauches)
 
+
+@app.route("/seance/add", methods=["GET"])
+def add_seance():
+    cursor = get_db().cursor()
+    sql = f'''
+    SELECT Atelier.libelle_atelier, Atelier.code_atelier
+    FROM Atelier;
+    '''
+    cursor.execute(sql)
+    ateliers = cursor.fetchall()
+
+    sql = f'''
+    SELECT Lieu.nom_lieu, Lieu.id_lieu
+    FROM Lieu;
+    '''
+    cursor.execute(sql)
+    lieux = cursor.fetchall()
+    return render_template("seance/add_seance.html", ateliers=ateliers, lieux=lieux)
+
+
+@app.route("/seance/add", methods=["POST"])
+def add_seance_post():
+    cursor = get_db().cursor()
+    sql = '''
+    SELECT Seance.id_seance
+    FROM Seance;
+    '''
+    cursor.execute(sql)
+    ids = cursor.fetchall()
+    id_max = max([x['id_seance'] for x in ids])
+    libelle_seance = request.form.get("libelle_seance")
+    date_seance = request.form.get("date_seance")
+    place_seance = int(request.form.get("place_seance"))
+    tarif = float(request.form.get("tarif"))
+    code_atelier = int(request.form.get("code_atelier"))
+    id_lieu = int(request.form.get("id_lieu"))
+    sql = '''
+    INSERT INTO Seance(id_seance, date_heure_seance, libelle_seance, nombre_places, tarif, id_lieu, code_atelier)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
+    '''
+    cursor.execute(sql, (id_max+1, date_seance, libelle_seance, place_seance, tarif, id_lieu, code_atelier))
+    get_db().commit()
+    flash(f"Séance {libelle_seance} ajoutée avec succès", "sucess")
+    return redirect("/seance/show")
+
+
 @app.route("/evaluation/show")
 def show_evaluation():
     cursor = get_db().cursor()
@@ -166,6 +215,7 @@ def show_evaluation():
     cursor.execute(sql)
     seances = cursor.fetchall()
     return render_template("evaluation/show_evaluation.html", seances=seances)
+
 
 @app.route("/evaluation/edit", methods=["GET"])
 def edit_evaluation():
@@ -181,6 +231,7 @@ def edit_evaluation():
     cursor.execute(sql)
     seance = cursor.fetchall()
     return render_template("evaluation/edit_evaluation.html", seance=seance)
+
 
 if __name__ == '__main__':
     app.run()

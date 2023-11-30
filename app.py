@@ -203,47 +203,6 @@ def add_seance_post():
     return redirect("/seance/show")
 
 
-@app.route("/evaluation/show")
-def show_evaluation():
-    cursor = get_db().cursor()
-    sql = '''
-    SELECT Seance.libelle_seance, Evaluation.*, Participant.prenom_participant, Participant.nom_participant
-    FROM Evaluation
-    JOIN Seance ON Evaluation.id_seance = Seance.id_seance
-    JOIN Participant ON Evaluation.id_participant = Participant.id_participant
-    ORDER BY Seance.libelle_seance
-    '''
-    cursor.execute(sql)
-    evaluations = cursor.fetchall()
-
-    # Regrouper les évaluations par séance
-    evaluations_grouped = {}
-    for evaluation in evaluations:
-        seance = evaluation['libelle_seance']
-        if seance not in evaluations_grouped:
-            evaluations_grouped[seance] = []
-        evaluations_grouped[seance].append(evaluation)
-
-    return render_template("evaluation/show_evaluation.html", evaluations_grouped=evaluations_grouped)
-
-
-
-
-
-@app.route("/evaluation/edit", methods=["GET"])
-def edit_evaluation():
-    idetifiant = int(request.args.get('id', '0'))
-    cursor = get_db().cursor()
-    sql = f'''
-        SELECT Seance.id_seance, Seance.libelle_seance, Seance.tarif, Lieu.nom_lieu, Lieu.ville_lieu
-        FROM Seance
-        JOIN Lieu
-        ON Lieu.id_lieu = Seance.id_lieu
-        WHERE Seance.id_seance = {idetifiant}
-        '''
-    cursor.execute(sql)
-    seance = cursor.fetchall()
-    return render_template("evaluation/edit_evaluation.html", seance=seance)
 
 
 if __name__ == '__main__':

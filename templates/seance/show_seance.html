@@ -6,7 +6,10 @@
 
 {% block body %}
     <main>
-        <h1>Liste des séances</h1>
+        <div class="show-header">
+            <h1>Liste des séances</h1>
+            <a href="/seance/etat">Afficher les états</a>
+        </div>
         <div class="list-seance">
             {% for seance in seances %}
                 <div class="seance-card">

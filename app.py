@@ -205,7 +205,32 @@ def add_seance_post():
 
 @app.route("/seance/etat")
 def show_seance_etat():
-    return render_template("seance/etat_seance.html")
+    lieux = request.args.getlist('id_lieu')
+    ateliers = request.args.getlist('code_atelier')
+    tarif_min, tarif_max = request.args.get('tarif_min', '0'), request.args.get('tarif_max', '1000000')
+    print(lieux, ateliers, tarif_min, tarif_max)
+    cursor = get_db().cursor()
+    sql = '''
+    SELECT Seance.id_seance, Seance.libelle_seance, Seance.date_heure_seance, Seance.nombre_places, Seance.tarif,
+     Atelier.code_atelier, Atelier.libelle_atelier,
+     Lieu.id_lieu, Lieu.nom_lieu
+    FROM seance
+    JOIN Atelier
+    ON Seance.code_atelier = Atelier.code_atelier
+    JOIN Lieu
+    ON Seance.id_lieu = Lieu.id_lieu
+    '''
+    sql2 = '''
+    SELECT SUM(nombre_places) as places_totales
+    FROM Seance;
+    '''
+
+    cursor.execute(sql)
+    seances = cursor.fetchall()
+
+    cursor.execute(sql2)
+    places_totales = cursor.fetchone()['places_totales']
+    return render_template("seance/etat_seance.html", seances=seances, places_totales=places_totales)
 
 
 @app.route("/evaluation/show")

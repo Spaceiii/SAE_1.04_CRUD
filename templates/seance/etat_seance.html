@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>état de séance</title>
+{% endblock %}
+
+{% block body %}
+    <main class="etat-seance">
+        <h1>état de séance :</h1>
+
+        <form class="etat-form" action="/seance/etat">
+            <div class="filtre-seance-container">
+                <div class="filtre-seance">
+                    {% for seance in seances %}
+                        <input type="checkbox" name="code_atelier" id="code_atelier_{{ seance.code_atelier }}" value="{{ seance.code_atelier }}" checked>
+                        <label for="code_atelier_{{ seance.code_atelier }}">{{ seance.libelle_atelier }}</label><br>
+                    {% endfor %}
+                </div>
+                <div class="filtre-seance">
+                    {% for seance in seances %}
+                        <input type="checkbox" name="id_lieu" id="id_lieu_{{ seance.id_lieu }}" value="{{ seance.id_lieu }}" checked>
+                        <label for="id_lieu_{{ seance.id_lieu }}">{{ seance.nom_lieu }}</label><br>
+                    {% endfor %}
+                </div>
+                <div class="filtre-seance">
+                    <label for="tarif_min">Tarif min :</label><input type="number" name="tarif_min" id="tarif_min">
+                    <br>
+                    <label for="tarif_max">Tarif max :</label><input type="number" name="tarif_max" id="tarif_max">
+                </div>
+            </div>
+
+            <input type="submit" value="Filtrer">
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <td>id_seance</td>
+                    <td>libelle_seance</td>
+                    <td>date_heure_seance</td>
+                    <td>nombre_places</td>
+                    <td>tarif</td>
+                    <td>code_atelier | libelle_atelier</td>
+                    <td>id_lieu | nom_lieu</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for seance in seances %}
+                <tr>
+                    <td>{{ seance.id_seance }}</td>
+                    <td>{{ seance.libelle_seance }}</td>
+                    <td>{{ seance.date_heure_seance }}</td>
+                    <td>{{ seance.nombre_places }}</td>
+                    <td>{{ seance.tarif }}</td>
+                    <td>{{ seance.code_atelier }} | {{ seance.libelle_atelier }}</td>
+                    <td>{{ seance.id_lieu }} | {{ seance.nom_lieu }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <p>Nombre de places totales : {{ places_totales }}</p>
+    </main>
+{% endblock %}

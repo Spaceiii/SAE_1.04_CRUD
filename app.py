@@ -202,6 +202,12 @@ def add_seance_post():
     flash(f"Séance {libelle_seance} ajoutée avec succès", "sucess")
     return redirect("/seance/show")
 
+
+@app.route("/seance/etat")
+def show_seance_etat():
+    return render_template("seance/etat_seance.html")
+
+
 @app.route("/evaluation/show")
 def show_evaluation():
     cursor = get_db().cursor()
@@ -286,6 +292,7 @@ def delete_evaluation():
     # Redirection vers la page d'affichage des évaluations
     return redirect("/evaluation/show")
 
+
 @app.route("/evaluation/add", methods=["GET"])
 def add_evaluation():
     cursor = get_db().cursor()
@@ -327,9 +334,6 @@ def add_evaluation_post():
     get_db().commit()
 
     return redirect("/evaluation/show")
-
-
-
 
 
 if __name__ == '__main__':

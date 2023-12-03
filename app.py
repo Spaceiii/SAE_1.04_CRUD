@@ -205,9 +205,10 @@ def add_seance_post():
 
 @app.route("/seance/etat")
 def show_seance_etat():
-    lieux = request.args.getlist('id_lieu')
-    ateliers = request.args.getlist('code_atelier')
-    tarif_min, tarif_max = request.args.get('tarif_min', '0'), request.args.get('tarif_max', '1000000')
+    lieux = [int(x) for x in request.args.getlist('id_lieu')]
+    ateliers = [int(x) for x in request.args.getlist('code_atelier')]
+    tarif_min = request.args.get('tarif_min', 0)
+    tarif_max = request.args.get('tarif_max', 1000000)
     print(lieux, ateliers, tarif_min, tarif_max)
     cursor = get_db().cursor()
     sql = '''
@@ -221,16 +222,45 @@ def show_seance_etat():
     ON Seance.id_lieu = Lieu.id_lieu
     '''
     sql2 = '''
-    SELECT SUM(nombre_places) as places_totales
-    FROM Seance;
+    SELECT SUM(nombre_places) AS places_totales, AVG(tarif) AS moyenne_tarif
+    FROM Seance
     '''
+    sql3 = '''
+    SELECT Seance.id_seance, Seance.libelle_seance, Seance.date_heure_seance, Seance.nombre_places, Seance.tarif,
+     Atelier.code_atelier, Atelier.libelle_atelier,
+     Lieu.id_lieu, Lieu.nom_lieu
+    FROM seance
+    JOIN Atelier
+    ON Seance.code_atelier = Atelier.code_atelier
+    JOIN Lieu
+    ON Seance.id_lieu = Lieu.id_lieu
+    '''
+    where_clauses = []
+    if lieux:
+        where_clauses.append(f'Seance.id_lieu IN ({", ".join(map(str, lieux))})')
+    if ateliers:
+        where_clauses.append(f'Seance.code_atelier IN ({", ".join(map(str, ateliers))})')
+    if tarif_min is not None:
+        where_clauses.append(f'Seance.tarif >= {tarif_min}')
+    if tarif_max is not None:
+        where_clauses.append(f'Seance.tarif <= {tarif_max}')
+    if where_clauses:
+        sql += ' WHERE ' + ' AND '.join(where_clauses)
+        sql2 += 'WHERE ' + ' AND '.join(where_clauses)
+
+    sql2 += ' GROUP BY code_atelier, id_lieu'
+
+    print(sql, sql2)
 
     cursor.execute(sql)
     seances = cursor.fetchall()
 
     cursor.execute(sql2)
-    places_totales = cursor.fetchone()['places_totales']
-    return render_template("seance/etat_seance.html", seances=seances, places_totales=places_totales)
+    datas = cursor.fetchone()
+
+    cursor.execute(sql3)
+    type_seances = cursor.fetchall()
+    return render_template("seance/etat_seance.html", type_seances=type_seances, seances=seances, datas=datas, ateliers=ateliers, lieux=lieux, tarif_min=tarif_min, tarif_max=tarif_max)
 
 
 @app.route("/evaluation/show")

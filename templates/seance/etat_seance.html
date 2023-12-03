@@ -11,21 +11,25 @@
         <form class="etat-form" action="/seance/etat">
             <div class="filtre-seance-container">
                 <div class="filtre-seance">
-                    {% for seance in seances %}
-                        <input type="checkbox" name="code_atelier" id="code_atelier_{{ seance.code_atelier }}" value="{{ seance.code_atelier }}" checked>
+                    {% for seance in type_seances %}
+                        <input type="checkbox" name="code_atelier" id="code_atelier_{{ seance.code_atelier }}" value="{{ seance.code_atelier }}"
+                          {% if not ateliers or seance.code_atelier in ateliers %}checked{% endif %}>
                         <label for="code_atelier_{{ seance.code_atelier }}">{{ seance.libelle_atelier }}</label><br>
                     {% endfor %}
                 </div>
                 <div class="filtre-seance">
-                    {% for seance in seances %}
-                        <input type="checkbox" name="id_lieu" id="id_lieu_{{ seance.id_lieu }}" value="{{ seance.id_lieu }}" checked>
+                    {% for seance in type_seances %}
+                        <input type="checkbox" name="id_lieu" id="id_lieu_{{ seance.id_lieu }}" value="{{ seance.id_lieu }}"
+                           {% if not ateliers or seance.id_lieu in lieux %}checked{% endif %}>
                         <label for="id_lieu_{{ seance.id_lieu }}">{{ seance.nom_lieu }}</label><br>
                     {% endfor %}
                 </div>
                 <div class="filtre-seance">
-                    <label for="tarif_min">Tarif min :</label><input type="number" name="tarif_min" id="tarif_min">
+                    <label for="tarif_min">Tarif min :</label>
+                    <input type="number" name="tarif_min" id="tarif_min" value="{{ tarif_min }}">
                     <br>
-                    <label for="tarif_max">Tarif max :</label><input type="number" name="tarif_max" id="tarif_max">
+                    <label for="tarif_max">Tarif max :</label>
+                    <input type="number" name="tarif_max" id="tarif_max" value="{{ tarif_max }}">
                 </div>
             </div>
 
@@ -59,6 +63,7 @@
             </tbody>
         </table>
 
-        <p>Nombre de places totales : {{ places_totales }}</p>
+        <p>Nombre de places totales : {{ datas.places_totales }}</p>
+        <p>Prix moyen : {{ datas.moyenne_tarif }}€</p>
     </main>
 {% endblock %}

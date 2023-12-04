@@ -248,9 +248,7 @@ def show_seance_etat():
         sql += ' WHERE ' + ' AND '.join(where_clauses)
         sql2 += 'WHERE ' + ' AND '.join(where_clauses)
 
-    sql2 += ' GROUP BY code_atelier, id_lieu'
-
-    print(sql, sql2)
+    # sql2 += ' GROUP BY nombre_places, tarif'
 
     cursor.execute(sql)
     seances = cursor.fetchall()

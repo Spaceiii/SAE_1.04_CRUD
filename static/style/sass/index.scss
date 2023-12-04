@@ -210,3 +210,9 @@ main.etat-seance {
     }
   }
 }
+
+.center-img {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

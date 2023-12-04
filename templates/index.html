@@ -7,7 +7,9 @@
 {% block body %}
     <main>
         <h1>Bienvenue chez InfoClimat !</h1>
-    </main>
 
-    {{ tarifs }}
+        <div class="center-img">
+            <img id="big-img" src="{{ url_for('static', filename="images/InfoClimat.png") }}" alt="Info Climat">
+        </div>
+    </main>
 {% endblock %}

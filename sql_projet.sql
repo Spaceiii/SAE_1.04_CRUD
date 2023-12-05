@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS
+ROP TABLE IF EXISTS
     peut_animer, dirige, est_utilise, est_inscrit, Evaluation, Seance,
     Embauche, Lieu, Profession, Materiel, Atelier, Participant, Animateur;
 

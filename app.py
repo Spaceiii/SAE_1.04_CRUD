@@ -123,12 +123,16 @@ def delete_seance():
     '''
     cursor.execute(sql, tuple([identifiant]))
     seance = cursor.fetchone()
-    sql = '''
-    DELETE FROM Seance
-    WHERE Seance.id_seance = %s
-    '''
-    cursor.execute(sql, identifiant)
-    get_db().commit()
+    tables = ["dirige", "est_utilise", "est_inscrit", "Evaluation", "Seance"]
+    for table in tables:
+        sql = '''
+        DELETE FROM %s
+        WHERE %s = %s
+        '''
+        cursor.execute(sql % (table, table + '.id_seance', '%s'), (identifiant,))
+        get_db().commit()
+        get_db().commit()
+
     flash(f"Séance \"{seance['libelle_seance']}\" supprimée avec succès", "danger")
     return redirect("/seance/show")
 

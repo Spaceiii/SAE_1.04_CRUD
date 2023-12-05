@@ -211,7 +211,7 @@ def show_seance_etat():
     SELECT Seance.id_seance, Seance.libelle_seance, Seance.date_heure_seance, Seance.nombre_places, Seance.tarif,
      Atelier.code_atelier, Atelier.libelle_atelier,
      Lieu.id_lieu, Lieu.nom_lieu
-    FROM seance
+    FROM Seance
     JOIN Atelier
     ON Seance.code_atelier = Atelier.code_atelier
     JOIN Lieu
@@ -225,7 +225,7 @@ def show_seance_etat():
     SELECT Seance.id_seance, Seance.libelle_seance, Seance.date_heure_seance, Seance.nombre_places, Seance.tarif,
      Atelier.code_atelier, Atelier.libelle_atelier,
      Lieu.id_lieu, Lieu.nom_lieu
-    FROM seance
+    FROM Seance
     JOIN Atelier
     ON Seance.code_atelier = Atelier.code_atelier
     JOIN Lieu
@@ -244,7 +244,7 @@ def show_seance_etat():
         sql += ' WHERE ' + ' AND '.join(where_clauses)
         sql2 += 'WHERE ' + ' AND '.join(where_clauses)
 
-    # sql2 += ' GROUP BY nombre_places, tarif'
+    sql2 += ' GROUP BY nombre_places, tarif'
 
     cursor.execute(sql)
     seances = cursor.fetchall()

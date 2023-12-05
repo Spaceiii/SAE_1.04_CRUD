@@ -263,87 +263,35 @@ def show_seance_etat():
 
 @app.route("/evaluation/show")
 def show_evaluation():
-    cursor = get_db().cursor()
-    sql = '''
-    SELECT Seance.libelle_seance, Evaluation.*, Participant.prenom_participant, Participant.nom_participant
-    FROM Evaluation
-    JOIN Seance ON Evaluation.id_seance = Seance.id_seance
-    JOIN Participant ON Evaluation.id_participant = Participant.id_participant
-    ORDER BY Seance.libelle_seance
-    '''
-    cursor.execute(sql)
-    evaluations = cursor.fetchall()
-
-    # Regrouper les évaluations par séance
-    evaluations_grouped = {}
-    for evaluation in evaluations:
-        seance = evaluation['libelle_seance']
-        if seance not in evaluations_grouped:
-            evaluations_grouped[seance] = []
-        evaluations_grouped[seance].append(evaluation)
-
-    return render_template("evaluation/show_evaluation.html", evaluations_grouped=evaluations_grouped)
-
-
-@app.route("/evaluation/edit", methods=["GET"])
-def edit_evaluation():
-    id_evaluation = int(request.args.get('id', '0'))
-    cursor = get_db().cursor()
-    sql = '''
-        SELECT Evaluation.*, Seance.libelle_seance, Participant.prenom_participant, Participant.nom_participant
+    try:
+        cursor = get_db().cursor(pymysql.cursors.DictCursor)
+        sql = '''
+        SELECT Evaluation.id_evaluation, Evaluation.note_animation, Evaluation.note_qualite, 
+               Evaluation.note_interet, Evaluation.commentaire, 
+               Participant.prenom_participant, Participant.nom_participant, 
+               Seance.libelle_seance
         FROM Evaluation
         JOIN Seance ON Evaluation.id_seance = Seance.id_seance
         JOIN Participant ON Evaluation.id_participant = Participant.id_participant
-        WHERE Evaluation.id_evaluation = %s;
+        ORDER BY Seance.libelle_seance, Evaluation.id_evaluation
         '''
-    cursor.execute(sql, (id_evaluation,))
-    evaluation = cursor.fetchone()
+        cursor.execute(sql)
+        evaluations = cursor.fetchall()
 
-    return render_template("evaluation/edit_evaluation.html", evaluation=evaluation)
+        # Regrouper les évaluations par séance
+        evaluations_grouped = {}
+        for evaluation in evaluations:
+            seance = evaluation['libelle_seance']
+            if seance not in evaluations_grouped:
+                evaluations_grouped[seance] = []
+            evaluations_grouped[seance].append(evaluation)
 
-
-@app.route("/evaluation/edit", methods=["POST"])
-def edit_evaluation_post():
-    id_evaluation = int(request.form.get("id_evaluation"))
-    note_animation = int(request.form.get("note_animation"))
-    note_qualite = int(request.form.get("note_qualite"))
-    note_interet = int(request.form.get("note_interet"))
-    commentaire = request.form.get("commentaire")
-
-    cursor = get_db().cursor()
-    sql = '''
-    UPDATE Evaluation
-    SET
-        note_animation = %s,
-        note_qualite = %s,
-        note_interet = %s,
-        commentaire = %s
-    WHERE id_evaluation = %s;
-    '''
-    cursor.execute(sql, (note_animation, note_qualite, note_interet, commentaire, id_evaluation))
-    get_db().commit()
-
-    return redirect("/evaluation/show")
+        return render_template("evaluation/show_evaluation.html", evaluations_grouped=evaluations_grouped)
+    except Exception as e:
+        print(e)  # Afficher l'erreur dans la console
+        return render_template("error.html"), 500  # Remplacer error.html par votre template d'erreur
 
 
-@app.route("/evaluation/delete", methods=["GET"])
-def delete_evaluation():
-    id_evaluation = int(request.args.get('id', '0'))
-
-    # Obtention du curseur pour exécuter des commandes SQL
-    cursor = get_db().cursor()
-
-    # Préparation de la requête SQL pour supprimer une évaluation spécifique
-    sql = 'DELETE FROM Evaluation WHERE id_evaluation = %s;'
-
-    # Exécution de la requête SQL avec le paramètre id_evaluation
-    cursor.execute(sql, (id_evaluation,))
-
-    # Validation de la transaction pour appliquer la suppression
-    get_db().commit()
-
-    # Redirection vers la page d'affichage des évaluations
-    return redirect("/evaluation/show")
 
 
 @app.route("/evaluation/add", methods=["GET"])
@@ -371,8 +319,8 @@ def add_evaluation_post():
     max_id = max_id_result['max_id'] if max_id_result['max_id'] is not None else 0
 
     # Collecter les données du formulaire
-    id_seance = int(request.form.get("libelle_seance"))
-    id_participant = int(request.form.get("nom_participant"))
+    id_seance = int(request.form.get("libelle_seance"))  # Utiliser l'ID de la séance directement
+    id_participant = int(request.form.get("nom_participant"))  # Utiliser l'ID du participant directement
     note_animation = int(request.form.get("note_animation"))
     note_qualite = int(request.form.get("note_qualite"))
     note_interet = int(request.form.get("note_interet"))
@@ -384,6 +332,67 @@ def add_evaluation_post():
     VALUES (%s, %s, %s, %s, %s, %s, %s);
     '''
     cursor.execute(sql, (max_id + 1, id_seance, id_participant, note_animation, note_qualite, note_interet, commentaire))
+    get_db().commit()
+
+    return redirect("/evaluation/show")
+
+
+@app.route("/evaluation/delete", methods=["GET"])
+def delete_evaluation():
+    id_evaluation = int(request.args.get('id', '0'))
+
+    # Obtention du curseur pour exécuter des commandes SQL
+    cursor = get_db().cursor()
+
+    # Préparation de la requête SQL pour supprimer une évaluation spécifique
+    sql = 'DELETE FROM Evaluation WHERE id_evaluation = %s;'
+
+    # Exécution de la requête SQL avec le paramètre id_evaluation
+    cursor.execute(sql, (id_evaluation,))
+
+    # Validation de la transaction pour appliquer la suppression
+    get_db().commit()
+
+    # Redirection vers la page d'affichage des évaluations
+    return redirect("/evaluation/show")
+
+@app.route("/evaluation/edit", methods=["GET"])
+def edit_evaluation():
+    identifiant = int(request.args.get('id', '0'))
+    cursor = get_db().cursor()
+    sql = '''
+        SELECT Evaluation.*, Participant.prenom_participant, Participant.nom_participant, Seance.libelle_seance
+        FROM Evaluation
+        JOIN Participant ON Evaluation.id_participant = Participant.id_participant
+        JOIN Seance ON Evaluation.id_seance = Seance.id_seance
+        WHERE Evaluation.id_evaluation = %s;
+        '''
+    cursor.execute(sql, (identifiant,))
+    evaluation = cursor.fetchone()
+
+    return render_template("evaluation/edit_evaluation.html", evaluation=evaluation)
+
+
+@app.route("/evaluation/edit", methods=["POST"])
+def edit_evaluation_post():
+    # Récupérez les données du formulaire ici
+    id_evaluation = int(request.form.get("id_evaluation"))
+    note_animation = int(request.form.get("note_animation"))
+    note_qualite = int(request.form.get("note_qualite"))
+    note_interet = int(request.form.get("note_interet"))
+    commentaire = request.form.get("commentaire")
+
+    cursor = get_db().cursor()
+    sql = '''
+    UPDATE Evaluation
+    SET
+        note_animation = %s,
+        note_qualite = %s,
+        note_interet = %s,
+        commentaire = %s
+    WHERE id_evaluation = %s;
+    '''
+    cursor.execute(sql, (note_animation, note_qualite, note_interet, commentaire, id_evaluation))
     get_db().commit()
 
     return redirect("/evaluation/show")

@@ -4,40 +4,55 @@
     <title>Afficher les évaluations</title>
 {% endblock %}
 
-{% block body %}
-    <main>
-            <h1>Evaluations des Séances</h1>
+{% block stylesheets %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/css/evaluation.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/css/index.css') }}">
+{% endblock %}
 
-    {% for seance, evaluations in evaluations_grouped.items() %}
-        <h2>{{ seance }}</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Participant</th>
-                    <th>Note Animation</th>
-                    <th>Note Qualité</th>
-                    <th>Note Intérêt</th>
-                    <th>Commentaire</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for evaluation in evaluations %}
-                    <tr>
-                        <td>{{ evaluation.id_evaluation }}</td>
-                        <td>{{ evaluation.prenom_participant }} {{ evaluation.nom_participant }}</td>
-                        <td>{{ evaluation.note_animation }}</td>
-                        <td>{{ evaluation.note_qualite }}</td>
-                        <td>{{ evaluation.note_interet }}</td>
-                        <td>{{ evaluation.commentaire }}</td>
-                        <td>
-                            <a href="{{ url_for('edit_seance', id_seance=evaluation.id_seance) }}">Éditer</a>
-                            <a href="{{ url_for('delete_seance', id_seance=evaluation.id_seance) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette séance ?');">Supprimer</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+{% block body %}
+    <main class="evaluation-page">
+        <h1>Evaluations des Séances</h1>
+        <div class="button-container">
+            <a href="{{ url_for('add_evaluation') }}" class="button add-button">＋ Ajouter une nouvelle évaluation</a>
+        </div>
+
+        {% if evaluations_grouped %}
+            {% for seance, evaluations in evaluations_grouped.items() %}
+                <section>
+                    <h2>{{ seance }}</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Participant</th>
+                                <th>Note Animation</th>
+                                <th>Note Qualité</th>
+                                <th>Note Intérêt</th>
+                                <th>Commentaire</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for evaluation in evaluations %}
+                                <tr>
+                                    <td>{{ evaluation.id_evaluation }}</td>
+                                    <td>{{ evaluation.prenom_participant }} {{ evaluation.nom_participant }}</td>
+                                    <td>{{ evaluation.note_animation }}</td>
+                                    <td>{{ evaluation.note_qualite }}</td>
+                                    <td>{{ evaluation.note_interet }}</td>
+                                    <td>{{ evaluation.commentaire }}</td>
+                                    <td>
+                                        <a href="{{ url_for('edit_evaluation', id=evaluation.id_evaluation) }}" class="button edit-button">Éditer</a>
+                                        <a href="{{ url_for('delete_evaluation', id=evaluation.id_evaluation) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette évaluation ?');" class="button delete-button">Supprimer</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </section>
+            {% endfor %}
+        {% else %}
+            <p>Aucune évaluation disponible.</p>
+        {% endif %}
     </main>
 {% endblock %}

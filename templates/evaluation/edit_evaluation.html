@@ -1,11 +1,39 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    <title>Editer une évaluation</title>
+    <title>Editer Evaluation</title>
+{% endblock %}
+
+{% block stylesheets %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/css/evaluation.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/css/index.css') }}">
 {% endblock %}
 
 {% block body %}
-    {{ evaluation }}
+<main class="evaluation-edit-page">
+    {% if evaluation == () %}
+        Cette évaluation n'existe pas / plus !
+    {% else %}
 
-    <form action=""></form>
+    <h1>Modifier l'évaluation de "{{ evaluation.prenom_participant }} {{ evaluation.nom_participant }}" pour la séance "{{ evaluation.libelle_seance }}"</h1>
+
+    <form action="/evaluation/edit" method="post">
+        <input name="id_evaluation" id="id_evaluation" type="hidden" value="{{ evaluation.id_evaluation }}">
+
+        <label for="note_animation">Note Animation :</label>
+        <input required type="number" min="1" max="5" id="note_animation" name="note_animation" value="{{ evaluation.note_animation }}">
+        <br>
+        <label for="note_qualite">Note Qualité : </label>
+        <input required type="number" min="1" max="5" id="note_qualite" name="note_qualite" value="{{ evaluation.note_qualite }}">
+        <br>
+        <label for="note_interet">Note Intérêt : </label>
+        <input required type="number" min="1" max="5" id="note_interet" name="note_interet" value="{{ evaluation.note_interet }}">
+        <br>
+        <label for="commentaire">Commentaire : </label>
+        <textarea required id="commentaire" name="commentaire">{{ evaluation.commentaire }}</textarea>
+        <br>
+        <input type="submit" value="Modifier" class="button edit-button">
+    </form>
+    {% endif %}
+</main>
 {% endblock %}

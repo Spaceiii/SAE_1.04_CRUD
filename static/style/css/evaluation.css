@@ -1,0 +1,151 @@
+/* Styles généraux pour la page d'évaluation */
+.evaluation-page {
+    font-family: 'Public Sans', sans-serif;
+    color: #333;
+    background-color: #f9fdf9;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.evaluation-page h1, .evaluation-page h2 {
+    color: #4a8f4b;
+}
+
+.evaluation-page table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.evaluation-page th, .evaluation-page td {
+    border: 1px solid #d7e7d7;
+    padding: 10px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.evaluation-page th {
+    background-color: #e6f2e6;
+    color: #4a8f4b;
+}
+
+.evaluation-page tr:nth-child(even) {
+    background-color: #f2f8f2;
+}
+
+.evaluation-page a {
+
+    text-decoration: none;
+}
+
+.evaluation-page a:hover {
+    text-decoration: underline;
+}
+
+/* Styles des boutons */
+.button {
+    padding: 6px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    font-size: 14px;
+    margin: 3px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+.add-button {
+    background-color: #5cb85c; /* Couleur verte pour ajouter */
+}
+
+.add-button:hover {
+    background-color: #4cae4c;
+}
+
+.edit-button {
+    background-color: #5bc0de; /* Couleur bleue pour éditer */
+}
+
+.edit-button:hover {
+    background-color: #31b0d5;
+}
+
+.delete-button {
+    background-color: #d9534f; /* Couleur rouge pour supprimer */
+}
+
+.delete-button:hover {
+    background-color: #c9302c;
+}
+
+/* Styles pour la page de modification d'une évaluation */
+.evaluation-edit-page {
+    font-family: 'Public Sans', sans-serif;
+    background-color: #f9fdf9;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #333;
+}
+
+.evaluation-edit-page h1 {
+    color: #4a8f4b;
+    margin-bottom: 20px;
+}
+
+.evaluation-edit-page form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.evaluation-edit-page label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.evaluation-edit-page input[type="number"],
+.evaluation-edit-page textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.evaluation-edit-page textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.evaluation-edit-page .button {
+    background-color: #5bc0de; /* Couleur bleue pour éditer */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.evaluation-edit-page .button:hover {
+    background-color: #31b0d5;
+}
+
+.evaluation-edit-page .edit-button {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 16px;
+}
+

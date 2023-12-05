@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Ajouter une Évaluation</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/css/evaluation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+<main class="evaluation-edit-page">
+    <h1>Ajouter une nouvelle évaluation</h1>
+
+    <form action="/evaluation/add" method="post">
+        <label for="libelle_seance">Libellé de la Séance :</label>
+        <select required id="libelle_seance" name="libelle_seance">
+            <option value="">--Choisir une séance--</option>
+            {% for seance in seances %}
+                <option value="{{ seance.id_seance }}">{{ seance.libelle_seance }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="nom_participant">Nom du Participant :</label>
+        <select required id="nom_participant" name="nom_participant">
+            <option value="">--Choisir un participant--</option>
+            {% for participant in participants %}
+                <option value="{{ participant.id_participant }}">{{ participant.nom_participant }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="note_animation">Note Animation :</label>
+        <input required type="number" min="1" max="5" id="note_animation" name="note_animation">
+        <br>
+        <label for="note_qualite">Note Qualité : </label>
+        <input required type="number" min="1" max="5" id="note_qualite" name="note_qualite">
+        <br>
+        <label for="note_interet">Note Intérêt : </label>
+        <input required type="number" min="1" max="5" id="note_interet" name="note_interet">
+        <br>
+        <label for="commentaire">Commentaire : </label>
+        <textarea required id="commentaire" name="commentaire"></textarea>
+        <br>
+        <input type="submit" value="Ajouter" class="button add-button">
+    </form>
+</main>
+{% endblock %}

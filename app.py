@@ -34,15 +34,7 @@ def teardown_db(exception):
 
 @app.route("/")
 def show_accueil():
-    cursor = get_db().cursor()
-    sql = '''
-        SELECT libelle_seance, AVG(tarif) AS prix_moyen
-        FROM Seance
-        GROUP BY libelle_seance; 
-    '''
-    cursor.execute(sql)
-    tarifs = cursor.fetchall()
-    return render_template("index.html", tarifs=tarifs)
+    return render_template("index.html")
 
 
 @app.route("/seance/show")

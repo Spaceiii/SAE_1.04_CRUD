@@ -1,16 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    <title>état de séance</title>
+    <title>État de séance</title>
 {% endblock %}
 
 {% block body %}
     <main class="etat-seance">
-        <h1>état de séance :</h1>
+        <h1>État de séance :</h1>
 
         <form class="etat-form" action="/seance/etat">
             <div class="filtre-seance-container">
                 <div class="filtre-seance">
+                    <h3>Type de séance</h3>
                     {% for seance in type_seances %}
                         <input type="checkbox" name="code_atelier" id="code_atelier_{{ seance.code_atelier }}" value="{{ seance.code_atelier }}"
                           {% if not ateliers or seance.code_atelier in ateliers %}checked{% endif %}>
@@ -18,6 +19,7 @@
                     {% endfor %}
                 </div>
                 <div class="filtre-seance">
+                    <h3>Type de lieu</h3>
                     {% for seance in type_seances %}
                         <input type="checkbox" name="id_lieu" id="id_lieu_{{ seance.id_lieu }}" value="{{ seance.id_lieu }}"
                            {% if not ateliers or seance.id_lieu in lieux %}checked{% endif %}>
@@ -25,6 +27,7 @@
                     {% endfor %}
                 </div>
                 <div class="filtre-seance">
+                    <h3>Tarifs</h3>
                     <label for="tarif_min">Tarif min :</label>
                     <input type="number" name="tarif_min" id="tarif_min" value="{{ tarif_min }}">
                     <br>
